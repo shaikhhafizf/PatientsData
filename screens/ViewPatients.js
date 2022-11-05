@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import commonStyles from "../styles/common";
 import theme from "../styles/theme";
+import PatientCard from "../components/PatientCard";
 
 export default class ViewPatients extends Component {
   constructor(props) {
@@ -11,8 +12,10 @@ export default class ViewPatients extends Component {
       sortBy: "Name",
     };
   }
-  onChangeSearchText = () => {
-    console.log("Typing...");
+  onChangeSearchText = (keywords) => {
+    if (keywords.length > 3) {
+      console.log("fetching...", keywords);
+    }
   };
   render() {
     return (
@@ -25,7 +28,9 @@ export default class ViewPatients extends Component {
           />
           <Text style={commonStyles.textButton}>Sort</Text>
         </View>
-        <View></View>
+        <View style={commonStyles.listContainer}>
+          <PatientCard />
+        </View>
       </View>
     );
   }
@@ -33,18 +38,17 @@ export default class ViewPatients extends Component {
 const styles = StyleSheet.create({
   filtersContainer: {
     width: "100%",
+    marginTop: 16,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
   searchBox: {
+    height: 35,
     flex: 1,
-    padding: 16,
-    paddingBottom: 8,
-    paddingTop: 8,
+    paddingLeft: 16,
     marginRight: 16,
     alignItems: "center",
-    justifyContent: "center",
     backgroundColor: theme.lightBlue,
     color: theme.dullBlue,
     borderRadius: 18,

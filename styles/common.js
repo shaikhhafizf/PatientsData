@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#ff0",
+    backgroundColor: "#fff",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
@@ -13,6 +13,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#023E73",
     fontWeight: theme.WeightB,
+    fontSize: theme.FontS,
+  },
+  listContainer: {
+    width: "100%",
+  },
+  bold: {
+    fontWeight: theme.WeightB,
+  },
+  smallText: {
     fontSize: theme.FontS,
   },
 });
