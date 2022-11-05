@@ -4,12 +4,13 @@ const theme = {
   dullBlue: "#03658C",
   white: "#FFFFFF",
   // font sizes 18,16
-  FontS: 12,
-  FontM: 16,
-  FontL: 24,
+  FontS: 16,
+  FontM: 24,
+  FontL: 32,
   // weights of font
   WeightR: "400",
   WeightM: "500",
+  WeightSB: "600",
   WeightB: "700",
 };
 export default theme;

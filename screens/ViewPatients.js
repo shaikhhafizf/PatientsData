@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import commonStyles from "../styles/common";
 import theme from "../styles/theme";
 import PatientCard from "../components/PatientCard";
@@ -25,12 +32,31 @@ export default class ViewPatients extends Component {
             style={styles.searchBox}
             onChangeText={this.onChangeSearchText}
             value={this.searchKey}
+            placeholder="Search"
           />
           <Text style={commonStyles.textButton}>Sort</Text>
         </View>
-        <View style={commonStyles.listContainer}>
-          <PatientCard />
-        </View>
+        <ScrollView style={commonStyles.listContainer}>
+          <PatientCard
+            data={{
+              firstName: "Hafiz",
+              lastName: "Shaikh",
+              age: 22,
+              gender: "Male",
+            }}
+            navigation={this.props.navigation}
+          />
+        </ScrollView>
+        <TouchableOpacity
+          style={commonStyles.addFloatingButton}
+          onPress={() => {
+            this.props.navigation.navigate("Add or update Patient Details", {
+              title: "Add New Patient Details",
+            });
+          }}
+        >
+          <Text style={commonStyles.addIcon}>+</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -52,5 +78,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.lightBlue,
     color: theme.dullBlue,
     borderRadius: 18,
+    fontSize: theme.FontS,
   },
 });

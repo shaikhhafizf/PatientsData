@@ -1,25 +1,43 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import theme from "../styles/theme";
 import commonStyles from "../styles/common";
 
 export default (props) => {
-  console.log(props.data);
   return (
-    <View style={styles.boxContainer}>
+    <TouchableOpacity
+      style={styles.boxContainer}
+      onPress={() => {
+        props.navigation.navigate("Manage Patients", {
+          title: `${props.data.firstName} ${props.data.lastName}`,
+          data: props.data,
+        });
+      }}
+    >
       <View style={styles.detailsContainer}>
-        <Text style={styles.name}>FirstName LastName</Text>
+        <Text style={styles.name}>
+          {props.data.firstName} {props.data.lastName}
+        </Text>
         <View style={styles.otherDetails}>
-          <Text style={commonStyles.smallText}>
-            Gender: <Text style={commonStyles.bold}>Male</Text>
+          <Text style={styles.gender}>
+            Gender: <Text style={commonStyles.bold}>{props.data.gender}</Text>
           </Text>
           <Text style={commonStyles.smallText}>
-            Age: <Text style={commonStyles.bold}>55 yrs</Text>
+            Age: <Text style={commonStyles.bold}>{props.data.age} yrs</Text>
           </Text>
         </View>
       </View>
-      <Text style={commonStyles.textButton}>Manage Records</Text>
-    </View>
+      <Text
+        style={commonStyles.textButton}
+        onPress={() => {
+          props.navigation.navigate("Patient Records", {
+            title: "Patient Records",
+          });
+        }}
+      >
+        Manage Records
+      </Text>
+    </TouchableOpacity>
   );
 };
 
@@ -40,12 +58,18 @@ const styles = StyleSheet.create({
   },
   name: {
     width: "100%",
+    fontSize: theme.FontM,
+    fontWeight: theme.WeightM,
   },
   otherDetails: {
     width: "100%",
     paddingTop: 8,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
+  },
+  gender: {
+    ...commonStyles.smallText,
+    width: 100,
   },
 });
