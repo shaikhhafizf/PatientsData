@@ -1,12 +1,18 @@
 import React, { Component } from "react";
 import {
+  Alert,
+  Button,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import DatePicker from "react-native-date-picker";
+import DateField from "react-native-datefield";
+import { getPatients } from "../API";
 import commonStyles from "../styles/common";
+import theme from "../styles/theme";
 
 export default class AddOrUpdatePatientDetails extends Component {
   constructor(props) {
@@ -20,28 +26,67 @@ export default class AddOrUpdatePatientDetails extends Component {
       emailAddress: "",
       phoneNumber: "",
       address: "",
+      open: false,
     };
   }
+  addPatient = () => {
+    getPatients().then((data) => {
+      console.log(data);
+    });
+    return;
+    if (
+      this.state.firstName &&
+      this.state.lastName &&
+      this.state.age &&
+      this.state.gender &&
+      this.state.DOB &&
+      this.state.emailAddress &&
+      this.state.phoneNumber
+    ) {
+      console.log("adding Patient");
+    } else {
+      if (!this.state.firstName) {
+        Alert.alert("First Name missing", "please enter patient First Name");
+      } else if (!this.state.lastName) {
+        Alert.alert("Last Name missing", "please enter patient Last Name");
+      } else if (!this.state.age) {
+        Alert.alert("Age missing", "please enter patient Age");
+      } else if (!this.state.gender) {
+        Alert.alert("Gender missing", "please enter patient gender");
+      } else if (!this.state.DOB) {
+        Alert.alert("please enter patient Birth date");
+      } else if (!this.state.emailAddress) {
+        Alert.alert("Gender missing", "please enter patient Email Address");
+      } else if (!this.state.phoneNumber) {
+        Alert.alert("Gender missing", "please enter patient Phone Number");
+      }
+    }
+  };
   render() {
+    const today = new Date();
     return (
       <View style={styles.mainContainer}>
+        <Text style={commonStyles.textButton}>Enter your first name*</Text>
         <TextInput
           style={commonStyles.textField}
           onChangeText={(txt) => this.setState({ firstName: txt })}
           value={this.state.firstName}
           placeholder="First Name"
         />
+        <Text style={commonStyles.textButton}>Enter your last name*</Text>
         <TextInput
           style={commonStyles.textField}
           onChangeText={(txt) => this.setState({ lastName: txt })}
           value={this.state.lastName}
           placeholder="Last Name"
         />
+        <Text style={commonStyles.textButton}>Enter your Age and Gender*</Text>
         <View style={styles.twoField}>
           <TextInput
             style={styles.ageField}
             onChangeText={(txt) => this.setState({ age: txt })}
             value={this.state.age}
+            keyboardType="numeric"
             placeholder="Age"
           />
           <TextInput
@@ -51,24 +96,49 @@ export default class AddOrUpdatePatientDetails extends Component {
             placeholder="Gender"
           />
         </View>
-        <TextInput
+        <Text style={commonStyles.textButton}>Enter your date of birth*</Text>
+        <DateField
+          styleInput={styles.dateFieldStyle}
+          containerStyle={styles.dateFieldContainer}
+          styleInputYear={styles.yearFieldStyle}
+          maximumDate={new Date()}
+          minimumDate={new Date(1800, 12, 31)}
+          onSubmit={(D) => this.setState({ DOB: D })}
+          handleErrors={() =>
+            Alert.alert(
+              "Invalid Birth date",
+              "please enter date before today or today"
+            )
+          }
+        />
+        {/* <TextInput
+          editable={false}
           style={commonStyles.textField}
-          onChangeText={(txt) => this.setState({ DOB: txt })}
+          onPressIn={() => {
+            this.setState({ open: true });
+          }}
           value={this.state.DOB}
           placeholder="Date Of Birth"
-        />
+        /> */}
+        {/* <DatePicker
+          date={this.state.DOB}
+          onDateChange={(d) => this.setState({ DOB: d })}
+        /> */}
+        <Text style={commonStyles.textButton}>Enter your email address*</Text>
         <TextInput
           style={commonStyles.textField}
           onChangeText={(txt) => this.setState({ emailAddress: txt })}
           value={this.state.emailAddress}
           placeholder="Email Address"
         />
+        <Text style={commonStyles.textButton}>Enter your phone number*</Text>
         <TextInput
           style={commonStyles.textField}
           onChangeText={(txt) => this.setState({ phoneNumber: txt })}
           value={this.state.phoneNumber}
           placeholder="Phone number"
         />
+        <Text style={commonStyles.textButton}>Enter your address</Text>
         <TextInput
           style={styles.addressField}
           onChangeText={(txt) => this.setState({ address: txt })}
@@ -77,7 +147,7 @@ export default class AddOrUpdatePatientDetails extends Component {
         />
         <TouchableOpacity
           style={commonStyles.submitButton}
-          onPress={() => console.log("click")}
+          onPress={this.addPatient}
         >
           <Text style={commonStyles.buttonText}>Submit</Text>
         </TouchableOpacity>
@@ -112,5 +182,21 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
     textAlignVertical: "top",
+  },
+  dateFieldStyle: {
+    ...commonStyles.textField,
+    width: "30%",
+    borderRadius: 8,
+    paddingHorizontal: 25,
+    justifyContent: "space-between",
+    marginRight: "5%",
+  },
+  yearFieldStyle: {
+    ...commonStyles.textField,
+    width: "30%",
+    borderRadius: 8,
+    paddingHorizontal: 25,
+    justifyContent: "space-between",
+    marginRight: 0,
   },
 });
