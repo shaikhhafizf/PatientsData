@@ -8,9 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import DatePicker from "react-native-date-picker";
 import DateField from "react-native-datefield";
-import { getPatients } from "../API";
+import { addNewPatients, getPatients } from "../API";
 import commonStyles from "../styles/common";
 import theme from "../styles/theme";
 
@@ -22,7 +21,7 @@ export default class AddOrUpdatePatientDetails extends Component {
       lastName: "",
       age: "",
       gender: "",
-      DOB: "",
+      DOB: this.props.DOB ? new Date("2000-12-12") : "",
       emailAddress: "",
       phoneNumber: "",
       address: "",
@@ -30,10 +29,6 @@ export default class AddOrUpdatePatientDetails extends Component {
     };
   }
   addPatient = () => {
-    getPatients().then((data) => {
-      console.log(data);
-    });
-    return;
     if (
       this.state.firstName &&
       this.state.lastName &&
@@ -41,9 +36,36 @@ export default class AddOrUpdatePatientDetails extends Component {
       this.state.gender &&
       this.state.DOB &&
       this.state.emailAddress &&
-      this.state.phoneNumber
+      this.state.phoneNumber &&
+      this.state.address
     ) {
-      console.log("adding Patient");
+      var data = {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        age: this.state.age,
+        gender: this.state.gender,
+        dob: `${this.state.DOB.getFullYear()}-${this.state.DOB.getMonth()}-${this.state.DOB.getDate()}`,
+        email: this.state.emailAddress,
+        phoneNumber: this.state.phoneNumber,
+        Address: this.state.address,
+      };
+      addNewPatients(data)
+        .then((res) => {
+          console.log("success", res);
+          if (res.data.error) {
+            Alert.alert(res.data.error);
+          } else {
+            Alert.alert("successfully added new patient", "", [
+              {
+                text: "Okay",
+                onPress: () => this.props.navigation.goBack(),
+              },
+            ]);
+          }
+        })
+        .catch((e) => {
+          console.log("err", e);
+        });
     } else {
       if (!this.state.firstName) {
         Alert.alert("First Name missing", "please enter patient First Name");
@@ -59,6 +81,8 @@ export default class AddOrUpdatePatientDetails extends Component {
         Alert.alert("Gender missing", "please enter patient Email Address");
       } else if (!this.state.phoneNumber) {
         Alert.alert("Gender missing", "please enter patient Phone Number");
+      } else if (!this.state.address) {
+        Alert.alert("address missing", "please enter patient Address");
       }
     }
   };
@@ -101,6 +125,7 @@ export default class AddOrUpdatePatientDetails extends Component {
           styleInput={styles.dateFieldStyle}
           containerStyle={styles.dateFieldContainer}
           styleInputYear={styles.yearFieldStyle}
+          defaultValue={this.state.DOB}
           maximumDate={new Date()}
           minimumDate={new Date(1800, 12, 31)}
           onSubmit={(D) => this.setState({ DOB: D })}
@@ -138,7 +163,7 @@ export default class AddOrUpdatePatientDetails extends Component {
           value={this.state.phoneNumber}
           placeholder="Phone number"
         />
-        <Text style={commonStyles.textButton}>Enter your address</Text>
+        <Text style={commonStyles.textButton}>Enter your address*</Text>
         <TextInput
           style={styles.addressField}
           onChangeText={(txt) => this.setState({ address: txt })}

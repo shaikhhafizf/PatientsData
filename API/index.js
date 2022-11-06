@@ -1,5 +1,9 @@
-const host = "http://10.0.2.2:3009";
+// const host = "http://localHost:3009";
+import Constants from "expo-constants";
 
+const { manifest } = Constants;
+
+const host = `http://${manifest.debuggerHost.split(":").shift()}:3009`;
 async function processResponse(response) {
   const statusCode = response.status;
   const data = response.json();
@@ -9,7 +13,7 @@ async function processResponse(response) {
   }));
 }
 //api call to add patients
-export const addPatients = async (data) => {
+export const addNewPatients = async (data) => {
   return fetch(`${host}/patient`, {
     method: "POST",
     headers: {

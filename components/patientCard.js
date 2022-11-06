@@ -32,6 +32,7 @@ export default (props) => {
         onPress={() => {
           props.navigation.navigate("Patient Records", {
             title: "Patient Records",
+            data: props.data,
           });
         }}
       >

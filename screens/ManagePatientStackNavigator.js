@@ -94,10 +94,10 @@ export default ({ navigation }) => {
               >
                 <Image source={require("../assets/icons/more-vertical.png")} />
                 {/* <View style={headerStyle.morePopup}>
-                <Text style={headerStyle.morePopupRow}>View Records</Text>
-                <Text style={headerStyle.morePopupRow}>Update</Text>
-                <Text style={headerStyle.morePopupRow}>Delete</Text>
-              </View> */}
+                  <Text style={headerStyle.morePopupRow}>View Records</Text>
+                  <Text style={headerStyle.morePopupRow}>Update</Text>
+                  <Text style={headerStyle.morePopupRow}>Delete</Text>
+                </View> */}
               </TouchableOpacity>
             </View>
           ),

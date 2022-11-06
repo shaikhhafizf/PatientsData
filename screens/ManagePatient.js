@@ -4,6 +4,7 @@ import commonStyles from "../styles/common";
 import theme from "../styles/theme";
 
 export default (props) => {
+  const data = props.route.params.data;
   return (
     <View style={commonStyles.mainContainer}>
       <View style={styles.detailBox}>
@@ -17,15 +18,15 @@ export default (props) => {
           <Text style={styles.label}>Address:</Text>
         </View>
         <View style={styles.dataRow}>
-          <Text style={styles.dataText}>Hafiz Shaikh</Text>
-          <Text style={styles.dataText}>21 yrs</Text>
-          <Text style={styles.dataText}>12-09-2001</Text>
-          <Text style={styles.dataText}>Male</Text>
-          <Text style={styles.dataText}>shaikhhafiz@gmail.com</Text>
-          <Text style={styles.dataText}>7475689563</Text>
           <Text style={styles.dataText}>
-            554 eglinton road, scarborogh, M1J3C5
+            {data.firstName} {data.LastName}
           </Text>
+          <Text style={styles.dataText}>{data.age} yrs</Text>
+          <Text style={styles.dataText}>{data.dob}</Text>
+          <Text style={styles.dataText}>{data.gender}</Text>
+          <Text style={styles.dataText}>{data.email}</Text>
+          <Text style={styles.dataText}>{data.phoneNumber}</Text>
+          <Text style={styles.dataText}>{data.Address}</Text>
         </View>
       </View>
     </View>
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     color: theme.DarkBlue,
   },
   dataText: {
-    maxWidth: "90%",
+    maxWidth: "80%",
     marginBottom: 16,
     fontSize: theme.FontM,
     fontWeight: theme.WeightSB,

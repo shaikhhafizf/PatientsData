@@ -6,10 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  FlatList,
 } from "react-native";
 import commonStyles from "../styles/common";
 import theme from "../styles/theme";
 import PatientCard from "../components/PatientCard";
+import { getPatients } from "../API";
 
 export default class ViewPatients extends Component {
   constructor(props) {
@@ -17,7 +19,15 @@ export default class ViewPatients extends Component {
     this.state = {
       searchKey: "",
       sortBy: "Name",
+      patients: [],
     };
+  }
+  componentDidMount() {
+    getPatients()
+      .then((res) => {
+        this.setState({ patients: res.data });
+      })
+      .catch((err) => console.log(err));
   }
   onChangeSearchText = (keywords) => {
     if (keywords.length > 3) {
@@ -37,14 +47,12 @@ export default class ViewPatients extends Component {
           <Text style={commonStyles.textButton}>Sort</Text>
         </View>
         <ScrollView style={commonStyles.listContainer}>
-          <PatientCard
-            data={{
-              firstName: "Hafiz",
-              lastName: "Shaikh",
-              age: 22,
-              gender: "Male",
-            }}
-            navigation={this.props.navigation}
+          <FlatList
+            data={this.state.patients}
+            keyExtractor={({ id }, index) => id}
+            renderItem={({ item }) => (
+              <PatientCard data={item} navigation={this.props.navigation} />
+            )}
           />
         </ScrollView>
         <TouchableOpacity
@@ -68,6 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    paddingBottom: 8,
   },
   searchBox: {
     height: 35,
