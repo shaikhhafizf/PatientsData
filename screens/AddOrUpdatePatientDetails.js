@@ -78,9 +78,15 @@ export default class AddOrUpdatePatientDetails extends Component {
       } else if (!this.state.DOB) {
         Alert.alert("please enter patient Birth date");
       } else if (!this.state.emailAddress) {
-        Alert.alert("Gender missing", "please enter patient Email Address");
+        Alert.alert(
+          "email Address missing",
+          "please enter patient Email Address"
+        );
       } else if (!this.state.phoneNumber) {
-        Alert.alert("Gender missing", "please enter patient Phone Number");
+        Alert.alert(
+          "Phone number missing",
+          "please enter patient Phone Number"
+        );
       } else if (!this.state.address) {
         Alert.alert("address missing", "please enter patient Address");
       }

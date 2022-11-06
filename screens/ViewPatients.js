@@ -23,11 +23,23 @@ export default class ViewPatients extends Component {
     };
   }
   componentDidMount() {
-    getPatients()
-      .then((res) => {
-        this.setState({ patients: res.data });
-      })
-      .catch((err) => console.log(err));
+    const { navigation } = this.props;
+
+    this.focusListener = navigation.addListener("focus", () => {
+      // call your refresh method here
+      getPatients()
+        .then((res) => {
+          this.setState({ patients: res.data });
+        })
+        .catch((err) => console.log(err));
+    });
+  }
+
+  componentWillUnmount() {
+    // Remove the event listener
+    if (this.focusListener != null && this.focusListener.remove) {
+      this.focusListener.remove();
+    }
   }
   onChangeSearchText = (keywords) => {
     if (keywords.length > 3) {
