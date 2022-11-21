@@ -14,7 +14,7 @@ async function processResponse(response) {
 }
 //api call to add patients
 export const addNewPatients = async (data) => {
-  return fetch(`${host}/patient`, {
+  return fetch(`${host}/patients`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -28,8 +28,57 @@ export const addNewPatients = async (data) => {
 };
 //api call to get patients
 export const getPatients = async () => {
-  console.log("reac");
   return fetch(`${host}/patients`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+    credentials: "include",
+  })
+    .then(processResponse)
+    .catch((err) => console.log(err));
+};
+//api call to delete patient
+export const deletePatient = async (id) => {
+  return fetch(`${host}/patients/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+    },
+    credentials: "include",
+  })
+    .then(processResponse)
+    .catch((err) => console.log(err));
+};
+//api call to delete patient
+export const updatePatient = async (data) => {
+  return fetch(`${host}/patients/${data.id}`, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  })
+    .then(processResponse)
+    .catch((err) => console.log(err));
+};
+//api call to add patient record
+export const addPatientRecord = async (data) => {
+  return fetch(`${host}/patientRecords`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  })
+    .then(processResponse)
+    .catch((err) => console.log(err));
+};
+//api call to get all patient record
+export const getPatientRecords = async (patientId) => {
+  return fetch(`${host}/patientRecords?patientId=${patientId}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
