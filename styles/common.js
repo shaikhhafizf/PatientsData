@@ -51,6 +51,17 @@ const commonStyles = StyleSheet.create({
     color: theme.DarkBlue,
     borderRadius: 8,
   },
+  fieldText: {
+    textAlign: "left",
+    fontSize: theme.FontXS,
+    color: theme.DarkBlue,
+  },
+  placeHolder: {
+    textAlign: "left",
+    fontSize: theme.FontXS,
+    color: theme.DarkBlue,
+    opacity: 0.6,
+  },
   submitButton: {
     width: "100%",
     height: 48,

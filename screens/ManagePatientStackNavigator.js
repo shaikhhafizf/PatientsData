@@ -22,9 +22,11 @@ const headerStyle = StyleSheet.create({
     marginRight: 16,
   },
   morePopup: {
-    top: 20,
+    position: "absolute",
+    top: 0,
     right: 0,
     width: 144,
+    height: 300,
     flexDirection: "column",
     backgroundColor: "#00a",
     borderRadius: 4,

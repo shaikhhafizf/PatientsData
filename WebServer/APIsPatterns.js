@@ -111,6 +111,7 @@ var plugin = function (option) {
           record.type = args.type;
           record.value = args.value;
           record.dateTime = args.dateTime;
+          record.description = args.description;
           record.save$((err, record) => {
             done(err, record.data$(false));
           });
@@ -122,6 +123,7 @@ var plugin = function (option) {
   });
   //------------------------------------Adding pattern for GET request[Get all patient Records]
   seneca.add("role:get,cmd:patientRecords", (args, done) => {
+    console.log("GET Request < Get all patient Records");
     var records = this.make("patientRecords");
     records.list$({ patientId: args.patientId }, done);
   });
@@ -137,6 +139,7 @@ var plugin = function (option) {
   });
   //------------------------------------Adding pattern for PATCH request[Updating patient Record]
   seneca.add("role:patch,cmd:patientRecords", (args, done) => {
+    console.log("PATCH REQUEST: updating patient record request");
     var records = this.make("patientRecords");
     var patientRecordObj = {};
     if (args.type) {
@@ -148,6 +151,10 @@ var plugin = function (option) {
     if (args.value) {
       patientRecordObj.value = args.value;
     }
+    if (args.description) {
+      patientRecordObj.description = args.description;
+    }
+    console.log(patientRecordObj, args.id, args.patientId);
     records.load$(args.recordId, (err, record) => {
       if (record === null) {
         done(err, { error: "record Id not found" });

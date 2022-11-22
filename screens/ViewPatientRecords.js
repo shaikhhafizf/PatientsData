@@ -9,6 +9,8 @@ import {
 import commonStyles from "../styles/common";
 import theme from "../styles/theme";
 import PatientRecordCard from "../components/PatientRecordCard";
+import { getPatientRecords } from "../API";
+import { FlatList } from "react-native-gesture-handler";
 
 export default class ViewPatientRecords extends Component {
   constructor(props) {
@@ -17,6 +19,28 @@ export default class ViewPatientRecords extends Component {
       searchKey: "",
       sortBy: "Name",
     };
+  }
+  refresh = () => {
+    const { route } = this.props;
+    getPatientRecords(route.params.data.id)
+      .then((res) => {
+        this.setState({ records: res.data });
+      })
+      .catch((err) => console.log(err));
+  };
+  componentDidMount() {
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener("focus", () => {
+      // call your refresh method here
+      this.refresh();
+    });
+  }
+
+  componentWillUnmount() {
+    // Remove the event listener
+    if (this.focusListener != null && this.focusListener.remove) {
+      this.focusListener.remove();
+    }
   }
   onChangeSearchText = (keywords) => {
     if (keywords.length > 3) {
@@ -36,20 +60,24 @@ export default class ViewPatientRecords extends Component {
           <Text style={commonStyles.textButton}>Sort</Text>
         </View>
         <View style={commonStyles.listContainer}>
-          <PatientRecordCard
-            data={{
-              dataType: "Blood presure",
-              value: "114/74 mm Hg",
-              time: "22",
-              description: "kdjfakdka",
-            }}
-            navigation={this.props.navigation}
+          <FlatList
+            data={this.state.records}
+            keyExtractor={({ id }, index) => id}
+            renderItem={({ item }) => (
+              <PatientRecordCard
+                data={item}
+                navigation={this.props.navigation}
+                refresh={this.refresh}
+              />
+            )}
           />
         </View>
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("Add or update Patient Record", {
               title: "Add New Patient Record",
+              data: {},
+              patientId: this.props.route.params.data.id,
             });
           }}
           style={commonStyles.addFloatingButton}

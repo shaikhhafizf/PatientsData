@@ -3,7 +3,9 @@ const theme = {
   lightBlue: "#88DFF2",
   dullBlue: "#03658C",
   white: "#FFFFFF",
+  gray: "",
   // font sizes 18,16
+  FontXS: 12,
   FontS: 16,
   FontM: 24,
   FontL: 32,

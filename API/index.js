@@ -56,6 +56,7 @@ export const updatePatient = async (data) => {
     method: "PATCH",
     headers: {
       Accept: "application/json",
+      "Content-Type": "application/json",
     },
     credentials: "include",
     body: JSON.stringify(data),
@@ -69,9 +70,37 @@ export const addPatientRecord = async (data) => {
     method: "POST",
     headers: {
       Accept: "application/json",
+      "Content-Type": "application/json",
     },
     credentials: "include",
     body: JSON.stringify(data),
+  })
+    .then(processResponse)
+    .catch((err) => console.log(err));
+};
+//api call to get all patient record
+export const updatePatientRecords = async (data) => {
+  return fetch(`${host}/patientRecords/${data.id}`, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  })
+    .then(processResponse)
+    .catch((err) => console.log(err));
+};
+//api call to get all patient record
+export const deletePatientRecords = async (id) => {
+  return fetch(`${host}/patientRecords/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
   })
     .then(processResponse)
     .catch((err) => console.log(err));
