@@ -17,6 +17,14 @@ const headerStyle = StyleSheet.create({
   title: {
     ...commonStyles.fontL,
   },
+  backButton: {
+    width: 40,
+    marginRight: 8,
+    marginLeft: 16,
+  },
+  backButtonIcon: {
+    resizeMode: "center",
+  },
   menuBtn: {
     paddingLeft: 20,
     marginRight: 16,
@@ -56,12 +64,15 @@ export default ({ navigation }) => {
         headerTintColor: "#fff",
         headerLeft: () => (
           <TouchableOpacity
-            style={headerStyle.menuBtn}
+            style={headerStyle.backButton}
             onPress={() => {
               navigation.goBack();
             }}
           >
-            <Image source={require("../assets/icons/arrow.png")} />
+            <Image
+              style={headerStyle.backButtonIcon}
+              source={require("../assets/icons/arrow.png")}
+            />
           </TouchableOpacity>
         ),
       })}
@@ -86,23 +97,24 @@ export default ({ navigation }) => {
       />
       <Stack.Screen
         options={{
-          headerRight: () => (
-            <View>
-              <TouchableOpacity
-                style={headerStyle.menuBtn}
-                onPress={() => {
-                  console.log("more...");
-                }}
-              >
-                <Image source={require("../assets/icons/more-vertical.png")} />
-                {/* <View style={headerStyle.morePopup}>
-                  <Text style={headerStyle.morePopupRow}>View Records</Text>
-                  <Text style={headerStyle.morePopupRow}>Update</Text>
-                  <Text style={headerStyle.morePopupRow}>Delete</Text>
-                </View> */}
-              </TouchableOpacity>
-            </View>
-          ),
+          headerShown: false,
+          // headerRight: () => (
+          //   <View>
+          //     <TouchableOpacity
+          //       style={headerStyle.menuBtn}
+          //       onPress={() => {
+          //         console.log("more...");
+          //       }}
+          //     >
+          //       <Image source={require("../assets/icons/more-vertical.png")} />
+          //       {/* <View style={headerStyle.morePopup}>
+          //         <Text style={headerStyle.morePopupRow}>View Records</Text>
+          //         <Text style={headerStyle.morePopupRow}>Update</Text>
+          //         <Text style={headerStyle.morePopupRow}>Delete</Text>
+          //       </View> */}
+          //     </TouchableOpacity>
+          //   </View>
+          // ),
         }}
         name="Manage Patients"
         component={ManagePatient}

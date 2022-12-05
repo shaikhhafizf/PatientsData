@@ -9,22 +9,29 @@ import {
   View,
 } from "react-native";
 import DateField from "react-native-datefield";
-import { addNewPatients, getPatients } from "../API";
+import { addNewPatients, getPatients, updatePatient } from "../API";
 import commonStyles from "../styles/common";
 import theme from "../styles/theme";
 
 export default class AddOrUpdatePatientDetails extends Component {
   constructor(props) {
     super(props);
+    const routeProps = this.props.route?.params?.data;
     this.state = {
-      firstName: "",
-      lastName: "",
-      age: "",
-      gender: "",
-      DOB: this.props.DOB ? new Date("2000-12-12") : "",
-      emailAddress: "",
-      phoneNumber: "",
-      address: "",
+      firstName: routeProps?.firstName ? routeProps?.firstName : "",
+      lastName: routeProps?.lastName ? routeProps.lastName : "",
+      age: routeProps?.age ? routeProps.age : "",
+      gender: routeProps?.gender ? routeProps.gender : "",
+      DOB: routeProps?.dob
+        ? new Date(
+            `${routeProps.dob.split("-")[2]}-${routeProps.dob.split("-")[1]}-${
+              routeProps.dob.split("-")[0]
+            }`
+          )
+        : "",
+      emailAddress: routeProps?.email ? routeProps.email : "",
+      phoneNumber: routeProps?.phoneNumber ? routeProps.phoneNumber : "",
+      address: routeProps?.Address ? routeProps.Address : "",
       open: false,
     };
   }
@@ -39,6 +46,18 @@ export default class AddOrUpdatePatientDetails extends Component {
       this.state.phoneNumber &&
       this.state.address
     ) {
+      if (
+        !/^[a-zA-Z0-9]{6,}@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(
+          this.state.emailAddress
+        )
+      ) {
+        Alert.alert("Invalid Email", "please enter valid email");
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(this.state.phoneNumber)) {
+        Alert.alert("Invalid phone number", "please enter valid phone number");
+        return;
+      }
       var data = {
         firstName: this.state.firstName,
         lastName: this.state.lastName,
@@ -49,6 +68,27 @@ export default class AddOrUpdatePatientDetails extends Component {
         phoneNumber: this.state.phoneNumber,
         Address: this.state.address,
       };
+      if (this.props.route.params.data?.id) {
+        data.id = this.props.route.params.data.id;
+        updatePatient(data)
+          .then((res) => {
+            console.log("success", res);
+            if (res.data.error) {
+              Alert.alert(res.data.error);
+            } else {
+              Alert.alert("successfully updated patient", "", [
+                {
+                  text: "Okay",
+                  onPress: () => this.props.navigation.navigate("Patients"),
+                },
+              ]);
+            }
+          })
+          .catch((e) => {
+            console.log("err", e);
+          });
+        return;
+      }
       addNewPatients(data)
         .then((res) => {
           console.log("success", res);
@@ -92,6 +132,17 @@ export default class AddOrUpdatePatientDetails extends Component {
       }
     }
   };
+  setBirthdayAndAge = (date) => {
+    var today = new Date();
+    var birthDate = new Date(date);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    console.log(date, age);
+    this.setState({ DOB: date, age: age.toString() });
+  };
   render() {
     const today = new Date();
     return (
@@ -110,6 +161,22 @@ export default class AddOrUpdatePatientDetails extends Component {
           value={this.state.lastName}
           placeholder="Last Name"
         />
+        <Text style={commonStyles.textButton}>Enter your date of birth*</Text>
+        <DateField
+          styleInput={styles.dateFieldStyle}
+          containerStyle={styles.dateFieldContainer}
+          styleInputYear={styles.yearFieldStyle}
+          defaultValue={this.state.DOB}
+          maximumDate={new Date()}
+          minimumDate={new Date(1800, 12, 31)}
+          onSubmit={this.setBirthdayAndAge}
+          handleErrors={() =>
+            Alert.alert(
+              "Invalid Birth date",
+              "please enter date before today or today"
+            )
+          }
+        />
         <Text style={commonStyles.textButton}>Enter your Age and Gender*</Text>
         <View style={styles.twoField}>
           <TextInput
@@ -117,6 +184,7 @@ export default class AddOrUpdatePatientDetails extends Component {
             onChangeText={(txt) => this.setState({ age: txt })}
             value={this.state.age}
             keyboardType="numeric"
+            editable={false}
             placeholder="Age"
           />
           <TextInput
@@ -126,22 +194,6 @@ export default class AddOrUpdatePatientDetails extends Component {
             placeholder="Gender"
           />
         </View>
-        <Text style={commonStyles.textButton}>Enter your date of birth*</Text>
-        <DateField
-          styleInput={styles.dateFieldStyle}
-          containerStyle={styles.dateFieldContainer}
-          styleInputYear={styles.yearFieldStyle}
-          defaultValue={this.state.DOB}
-          maximumDate={new Date()}
-          minimumDate={new Date(1800, 12, 31)}
-          onSubmit={(D) => this.setState({ DOB: D })}
-          handleErrors={() =>
-            Alert.alert(
-              "Invalid Birth date",
-              "please enter date before today or today"
-            )
-          }
-        />
         {/* <TextInput
           editable={false}
           style={commonStyles.textField}
